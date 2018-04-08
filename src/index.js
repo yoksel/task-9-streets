@@ -3,7 +3,6 @@ import './styles.css';
 import {streets} from './data/streets';
 import {types, typesMap} from './data/dictionary';
 
-const varsStr = types.join('|');
 const streetsSet = prepareStreets(streets);
 const inputElem = document.querySelector('.streets__input');
 const outputElem = document.querySelector('.streets__output');
@@ -11,7 +10,6 @@ const counterElem = document.querySelector('.streets__counter');
 const showAllElem = document.querySelector('.streets__show-all');
 const showAllClassHidden = 'streets__show-all--hidden';
 
-let isWaiting = false;
 // Хранилище результатов для уточняющего поиска
 // Очищается если пользователь стёр часть запроса или стёр запрос
 let founded = [];
@@ -24,13 +22,10 @@ const max = 10;
 inputElem.addEventListener('input', handleRequest);
 showAllElem.addEventListener('click', showAllItems);
 
-
 // ------------------------------
 // Подготовка улиц к фильтрации: извлечение типа
 
 function prepareStreets(streetsSrc) {
-    const regexp = new RegExp(`,{0,}\\s{1,}(${varsStr})`);
-
     streetsSrc = streetsSrc.map(item => {
         let type = getType(item).type;
 
