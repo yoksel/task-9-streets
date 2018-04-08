@@ -89,8 +89,6 @@ function prepareRequest(str) {
     str = str.replace(',', '');
     str = str.toLowerCase();
 
-    console.log(str);
-
     let typeObj = getType(str);
     let type = typeObj.type;
 
@@ -174,7 +172,8 @@ function getCounter(foundedLength, maxLength) {
     let resultsCount = foundedLength;
 
     if (!resultsCount) {
-        return '';
+        showAllElem.classList.add(showAllClassHidden);
+        return '&nbsp;';
     }
 
     if (foundedLength > maxLength) {
