@@ -25,6 +25,7 @@ showAllElem.addEventListener('click', showAllItems);
 // ------------------------------
 // Подготовка улиц к фильтрации: извлечение типа
 
+// console.log(streetsSet);
 function prepareStreets(streetsSrc) {
     streetsSrc = streetsSrc.map(item => {
         let type = getType(item).type;
@@ -43,14 +44,36 @@ function prepareStreets(streetsSrc) {
 
 function findStreets(request) {
     const result = [];
+    const firstLetter = request.str[0];
     let counter = 0;
     let listForSearch = founded.length > 0 ? founded : streetsSet;
     let item;
+    let firstLetterFounded = false;
+
+    // Тип определился и вырезался из строки,
+    // название ещё не введено
+    if (!request.str) {
+        return result;
+    }
+
+    // var time = performance.now();
 
     for (item of listForSearch) {
         const name = item.name;
         const type = item.type;
         const nameForSearch = name.toLowerCase();
+
+        // Первая буква названия и первая буква запроса не совпадают
+        if(nameForSearch[0] !== firstLetter) {
+            // Началась следующая буква, прерываем цикл
+            if(firstLetterFounded) {
+                break;
+            }
+            // Нужная буква не найдена, продолжаем искать
+            continue;
+        }
+
+        firstLetterFounded = true;
         let street = '';
         let isMatched = false;
 
@@ -73,6 +96,9 @@ function findStreets(request) {
             }
         }
     }
+
+    // time = performance.now() - time;
+    // console.log('Время выполнения: ', time);
 
     return result;
 }
@@ -145,7 +171,13 @@ function handleRequest() {
                 .join('<br>');
 
         } else {
-            data.output = 'Ничего не найдено';
+            if (request.type) {
+                data.output = 'Введите название';
+            }
+            else {
+                data.output = 'Ничего не найдено';
+            }
+
         }
 
     } else {
